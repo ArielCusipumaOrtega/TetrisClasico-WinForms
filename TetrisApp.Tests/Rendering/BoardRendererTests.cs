@@ -119,5 +119,68 @@ namespace TetrisApp.Tests.Rendering
 
             Assert.Null(exception);
         }
+
+        [Fact]
+        public void DrawGhostBlock_ExecutesWithoutExceptions()
+        {
+            var renderer = new BoardRenderer();
+            using var bitmap = new Bitmap(100, 100);
+            using var graphics = Graphics.FromImage(bitmap);
+
+            var exception = Record.Exception(() =>
+            {
+                renderer.DrawGhostBlock(graphics, 5, 5, 30, Color.FromArgb(45, 0, 229, 255), Color.FromArgb(140, 0, 229, 255));
+            });
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void DrawBoard_WithGhostPiece_ExecutesWithoutExceptions()
+        {
+            var renderer = new BoardRenderer();
+            var board = new GameBoard();
+            var piece = Tetromino.Create(TetrominoType.T);
+            using var bitmap = new Bitmap(300, 600);
+            using var graphics = Graphics.FromImage(bitmap);
+
+            var exception = Record.Exception(() =>
+            {
+                renderer.DrawBoard(
+                    graphics,
+                    board,
+                    piece,
+                    new Position(0, 3),
+                    bitmap.Size,
+                    isPaused: false,
+                    ghostPos: new Position(18, 3));
+            });
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void DrawBoard_WhenGhostPositionMatchesActivePosition_ExecutesWithoutExceptions()
+        {
+            var renderer = new BoardRenderer();
+            var board = new GameBoard();
+            var piece = Tetromino.Create(TetrominoType.T);
+            using var bitmap = new Bitmap(300, 600);
+            using var graphics = Graphics.FromImage(bitmap);
+
+            var exception = Record.Exception(() =>
+            {
+                renderer.DrawBoard(
+                    graphics,
+                    board,
+                    piece,
+                    new Position(18, 3),
+                    bitmap.Size,
+                    isPaused: false,
+                    ghostPos: new Position(18, 3));
+            });
+
+            Assert.Null(exception);
+        }
     }
 }

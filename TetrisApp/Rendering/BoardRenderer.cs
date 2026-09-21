@@ -14,7 +14,7 @@ namespace TetrisApp.Rendering
         /// <summary>
         /// Dibuja el tablero completo: fondo, cuadrícula tenue, bloques fijos, pieza activa y cartel de pausa.
         /// </summary>
-        public void DrawBoard(Graphics g, GameBoard board, Tetromino? activePiece, Position activePos, Size canvasSize, bool isPaused)
+        public void DrawBoard(Graphics g, GameBoard board, Tetromino? activePiece, Position activePos, Size canvasSize, bool isPaused, Position? ghostPos = null)
         {
             g.Clear(TetrisPalette.BoardBackground);
 
@@ -44,7 +44,29 @@ namespace TetrisApp.Rendering
                 }
             }
 
-            // 3. Dibujar la pieza activa
+            // 3. Dibujar la silueta translúcida de la pieza fantasma (Ghost Piece)
+            if (activePiece != null && ghostPos.HasValue && ghostPos.Value != activePos)
+            {
+                int dim = activePiece.Dimension;
+                Color baseColor = TetrisPalette.GetColor(activePiece.Type);
+                Color fillColor = Color.FromArgb(45, baseColor.R, baseColor.G, baseColor.B);
+                Color borderColor = Color.FromArgb(140, baseColor.R, baseColor.G, baseColor.B);
+
+                for (int r = 0; r < dim; r++)
+                {
+                    for (int c = 0; c < dim; c++)
+                    {
+                        if (activePiece.Matrix[r, c] != 0)
+                        {
+                            int drawX = (ghostPos.Value.Column + c) * CellSize;
+                            int drawY = (ghostPos.Value.Row + r) * CellSize;
+                            DrawGhostBlock(g, drawX, drawY, CellSize, fillColor, borderColor);
+                        }
+                    }
+                }
+            }
+
+            // 4. Dibujar la pieza activa
             if (activePiece != null)
             {
                 int dim = activePiece.Dimension;
@@ -118,6 +140,24 @@ namespace TetrisApp.Rendering
             {
                 g.DrawLine(penBrillo, x + 1, y + 1, x + size - 2, y + 1);
                 g.DrawLine(penBrillo, x + 1, y + 1, x + 1, y + size - 2);
+            }
+        }
+
+        /// <summary>
+        /// Dibuja una celda de la silueta fantasma como bloque translúcido con contorno visible.
+        /// </summary>
+        public void DrawGhostBlock(Graphics g, int x, int y, int size, Color fillColor, Color borderColor)
+        {
+            Rectangle rect = new(x, y, size, size);
+
+            using (SolidBrush brush = new(fillColor))
+            {
+                g.FillRectangle(brush, rect);
+            }
+
+            using (Pen pen = new(borderColor, 1.5f))
+            {
+                g.DrawRectangle(pen, x + 1, y + 1, size - 2, size - 2);
             }
         }
 

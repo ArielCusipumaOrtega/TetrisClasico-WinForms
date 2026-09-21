@@ -353,5 +353,59 @@ namespace TetrisApp.Tests.Engine
             Assert.True(engine.Score.Lines >= 2);
             Assert.True(engine.Score.Score > scoreBefore);
         }
+
+        [Fact]
+        public void GetGhostPosition_WhenNoActivePiece_ReturnsCurrentPosition()
+        {
+            var engine = new TetrisEngine();
+            var ghostPos = engine.GetGhostPosition();
+
+            Assert.Equal(engine.CurrentPosition, ghostPos);
+        }
+
+        [Fact]
+        public void GetGhostPosition_EmptyBoard_CalculatesLowestDropRow()
+        {
+            var engine = new TetrisEngine(new ConstantRandom((int)TetrominoType.O));
+            engine.StartGame();
+
+            var ghostPos = engine.GetGhostPosition();
+
+            Assert.Equal(18, ghostPos.Row);
+            Assert.Equal(engine.CurrentPosition.Column, ghostPos.Column);
+        }
+
+        [Fact]
+        public void GetGhostPosition_WithObstacleBelow_StopsImmediatelyAboveObstacle()
+        {
+            var engine = new TetrisEngine(new ConstantRandom((int)TetrominoType.O));
+            engine.StartGame();
+
+            var obstacle = Tetromino.Create(TetrominoType.O);
+            engine.Board.PlacePiece(obstacle, new Position(15, 4));
+
+            var ghostPos = engine.GetGhostPosition();
+
+            Assert.Equal(13, ghostPos.Row);
+            Assert.Equal(engine.CurrentPosition.Column, ghostPos.Column);
+        }
+
+        [Fact]
+        public void GetGhostPosition_UpdatesWhenMovingHorizontally()
+        {
+            var engine = new TetrisEngine(new ConstantRandom((int)TetrominoType.O));
+            engine.StartGame();
+
+            var obstacle = Tetromino.Create(TetrominoType.O);
+            engine.Board.PlacePiece(obstacle, new Position(10, 2));
+
+            Assert.Equal(18, engine.GetGhostPosition().Row);
+
+            engine.MoveLeft();
+            engine.MoveLeft();
+            Assert.Equal(2, engine.CurrentPosition.Column);
+
+            Assert.Equal(8, engine.GetGhostPosition().Row);
+        }
     }
 }

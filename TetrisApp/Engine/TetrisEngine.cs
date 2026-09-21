@@ -146,17 +146,30 @@ namespace TetrisApp.Engine
             }
         }
 
+        /// <summary>
+        /// Calcula la posición proyectada donde aterrizará la pieza activa si cayera de inmediato (Ghost Piece).
+        /// </summary>
+        public Position GetGhostPosition()
+        {
+            if (CurrentPiece == null) return CurrentPosition;
+
+            var ghostPos = CurrentPosition;
+            while (Board.CanPlace(CurrentPiece, ghostPos.Down()))
+            {
+                ghostPos = ghostPos.Down();
+            }
+
+            return ghostPos;
+        }
+
         public void HardDrop()
         {
             if (State != GameState.Playing || CurrentPiece == null) return;
 
-            int steps = 0;
-            while (Board.CanPlace(CurrentPiece, CurrentPosition.Down()))
-            {
-                CurrentPosition = CurrentPosition.Down();
-                steps++;
-            }
+            var targetPos = GetGhostPosition();
+            int steps = targetPos.Row - CurrentPosition.Row;
 
+            CurrentPosition = targetPos;
             Score.AddHardDropBonus(steps);
             LockCurrentPieceAndContinue();
             ScoreChanged?.Invoke(this, EventArgs.Empty);

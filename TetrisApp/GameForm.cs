@@ -140,7 +140,8 @@ namespace TetrisApp
                 _engine.CurrentPiece,
                 _engine.CurrentPosition,
                 picTablero.ClientSize,
-                _engine.State == GameState.Paused);
+                _engine.State == GameState.Paused,
+                _engine.GetGhostPosition());
         }
 
         private void PicSiguiente_Paint(object? sender, PaintEventArgs e)

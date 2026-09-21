@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="TetrisApp.Tests/TetrisApp.Tests.csproj" />
   <Project Path="TetrisApp/TetrisApp.csproj" />
 </Solution>

@@ -10,7 +10,12 @@ namespace TetrisApp.Engine
     /// </summary>
     public class TetrisEngine
     {
-        private readonly Random _random = new();
+        private readonly Random _random;
+
+        public TetrisEngine(Random? random = null)
+        {
+            _random = random ?? new Random();
+        }
 
         public GameBoard Board { get; } = new();
         public GameScore Score { get; } = new();

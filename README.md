@@ -10,6 +10,12 @@ Implementación moderna, desacoplada y fiel del legendario **Tetris** en **C# y 
 
 ---
 
+## 🕹️ Demostración
+
+<img width="466" height="576" alt="Tetris Clásico 2026-09-21 19-48-57" src="https://github.com/user-attachments/assets/828eb96b-1eae-4e38-af3e-430453ae6bcb" />
+
+---
+
 ## 📑 Tabla de Contenidos
 
 1. [✨ Características Principales](#-características-principales)

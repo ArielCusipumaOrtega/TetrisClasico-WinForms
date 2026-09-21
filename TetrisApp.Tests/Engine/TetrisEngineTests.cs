@@ -407,5 +407,42 @@ namespace TetrisApp.Tests.Engine
 
             Assert.Equal(8, engine.GetGhostPosition().Row);
         }
+
+        [Fact]
+        public void Rotate_FiresPieceRotatedEvent()
+        {
+            var engine = new TetrisEngine();
+            engine.StartGame();
+            engine.MoveDown();
+            engine.MoveDown();
+
+            bool eventFired = false;
+            engine.PieceRotated += (s, e) => eventFired = true;
+
+            engine.Rotate();
+
+            Assert.True(eventFired);
+        }
+
+        [Fact]
+        public void LockingPiece_FiresLinesClearedEventWithCount()
+        {
+            var engine = new TetrisEngine();
+            engine.StartGame();
+
+            // Prefill row 19 completely
+            var oPiece = Tetromino.Create(TetrominoType.O);
+            for (int col = 0; col < GameBoard.Columns; col += 2)
+            {
+                engine.Board.PlacePiece(oPiece, new Position(18, col));
+            }
+
+            int linesReported = 0;
+            engine.LinesCleared += (s, count) => linesReported = count;
+
+            engine.HardDrop();
+
+            Assert.True(linesReported >= 2);
+        }
     }
 }

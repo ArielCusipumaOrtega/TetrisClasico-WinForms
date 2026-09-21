@@ -32,6 +32,8 @@ namespace TetrisApp.Engine
         public event EventHandler? BoardChanged;
         public event EventHandler? ScoreChanged;
         public event EventHandler? GameOver;
+        public event EventHandler? PieceRotated;
+        public event EventHandler<int>? LinesCleared;
 
         /// <summary>
         /// Inicializa una nueva partida de Tetris.
@@ -129,6 +131,7 @@ namespace TetrisApp.Engine
             {
                 CurrentPiece = rotated;
                 BoardChanged?.Invoke(this, EventArgs.Empty);
+                PieceRotated?.Invoke(this, EventArgs.Empty);
             }
             // 2. Wall kick básico a la izquierda si choca con el límite derecho
             else if (Board.CanPlace(rotated, CurrentPosition.Left()))
@@ -136,6 +139,7 @@ namespace TetrisApp.Engine
                 CurrentPosition = CurrentPosition.Left();
                 CurrentPiece = rotated;
                 BoardChanged?.Invoke(this, EventArgs.Empty);
+                PieceRotated?.Invoke(this, EventArgs.Empty);
             }
             // 3. Wall kick básico a la derecha si choca con el límite izquierdo
             else if (Board.CanPlace(rotated, CurrentPosition.Right()))
@@ -143,6 +147,7 @@ namespace TetrisApp.Engine
                 CurrentPosition = CurrentPosition.Right();
                 CurrentPiece = rotated;
                 BoardChanged?.Invoke(this, EventArgs.Empty);
+                PieceRotated?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -187,6 +192,7 @@ namespace TetrisApp.Engine
             if (linesCleared > 0)
             {
                 Score.AddLines(linesCleared);
+                LinesCleared?.Invoke(this, linesCleared);
                 ScoreChanged?.Invoke(this, EventArgs.Empty);
             }
 

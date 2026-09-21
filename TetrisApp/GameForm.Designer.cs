@@ -48,7 +48,7 @@ namespace TetrisApp
             picTablero.BorderStyle = BorderStyle.FixedSingle;
             picTablero.Location = new Point(10, 10);
             picTablero.Name = "picTablero";
-            picTablero.Size = new Size(265, 446);
+            picTablero.Size = new Size(300, 512);
             picTablero.TabIndex = 0;
             picTablero.TabStop = false;
             // 
@@ -62,9 +62,9 @@ namespace TetrisApp
             pnlLateral.Controls.Add(lblNivel);
             pnlLateral.Controls.Add(btnIniciar);
             pnlLateral.Controls.Add(btnPausa);
-            pnlLateral.Location = new Point(281, 10);
+            pnlLateral.Location = new Point(316, 10);
             pnlLateral.Name = "pnlLateral";
-            pnlLateral.Size = new Size(180, 446);
+            pnlLateral.Size = new Size(180, 512);
             pnlLateral.TabIndex = 1;
             // 
             // lblSigTitulo
@@ -128,7 +128,7 @@ namespace TetrisApp
             btnIniciar.FlatStyle = FlatStyle.Flat;
             btnIniciar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnIniciar.ForeColor = Color.White;
-            btnIniciar.Location = new Point(15, 341);
+            btnIniciar.Location = new Point(15, 383);
             btnIniciar.Name = "btnIniciar";
             btnIniciar.Size = new Size(150, 40);
             btnIniciar.TabIndex = 5;
@@ -143,7 +143,7 @@ namespace TetrisApp
             btnPausa.FlatStyle = FlatStyle.Flat;
             btnPausa.Font = new Font("Segoe UI", 9F);
             btnPausa.ForeColor = Color.White;
-            btnPausa.Location = new Point(15, 399);
+            btnPausa.Location = new Point(15, 447);
             btnPausa.Name = "btnPausa";
             btnPausa.Size = new Size(150, 35);
             btnPausa.TabIndex = 6;
@@ -156,7 +156,7 @@ namespace TetrisApp
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(24, 26, 32);
-            ClientSize = new Size(471, 475);
+            ClientSize = new Size(504, 533);
             Controls.Add(pnlLateral);
             Controls.Add(picTablero);
             FormBorderStyle = FormBorderStyle.FixedSingle;

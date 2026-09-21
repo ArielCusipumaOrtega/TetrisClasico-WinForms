@@ -30,6 +30,7 @@ namespace TetrisApp.Tests.UI
                     Assert.NotNull(panel.Controls["lblNivel"]);
                     Assert.NotNull(panel.Controls["btnIniciar"]);
                     Assert.NotNull(panel.Controls["btnPausa"]);
+                    Assert.NotNull(panel.Controls["btnSonido"]);
                     Assert.NotNull(panel.Controls["picSiguiente"]);
                 }
                 catch (Exception ex)

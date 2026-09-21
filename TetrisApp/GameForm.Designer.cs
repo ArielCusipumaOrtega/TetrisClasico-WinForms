@@ -37,6 +37,7 @@ namespace TetrisApp
             lblNivel = new Label();
             btnIniciar = new Button();
             btnPausa = new Button();
+            btnSonido = new Button();
             ((System.ComponentModel.ISupportInitialize)picTablero).BeginInit();
             pnlLateral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picSiguiente).BeginInit();
@@ -62,6 +63,7 @@ namespace TetrisApp
             pnlLateral.Controls.Add(lblNivel);
             pnlLateral.Controls.Add(btnIniciar);
             pnlLateral.Controls.Add(btnPausa);
+            pnlLateral.Controls.Add(btnSonido);
             pnlLateral.Location = new Point(316, 10);
             pnlLateral.Name = "pnlLateral";
             pnlLateral.Size = new Size(180, 512);
@@ -128,9 +130,9 @@ namespace TetrisApp
             btnIniciar.FlatStyle = FlatStyle.Flat;
             btnIniciar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnIniciar.ForeColor = Color.White;
-            btnIniciar.Location = new Point(15, 383);
+            btnIniciar.Location = new Point(15, 360);
             btnIniciar.Name = "btnIniciar";
-            btnIniciar.Size = new Size(150, 40);
+            btnIniciar.Size = new Size(150, 36);
             btnIniciar.TabIndex = 5;
             btnIniciar.Text = "Iniciar Juego";
             btnIniciar.UseVisualStyleBackColor = false;
@@ -143,13 +145,28 @@ namespace TetrisApp
             btnPausa.FlatStyle = FlatStyle.Flat;
             btnPausa.Font = new Font("Segoe UI", 9F);
             btnPausa.ForeColor = Color.White;
-            btnPausa.Location = new Point(15, 447);
+            btnPausa.Location = new Point(15, 406);
             btnPausa.Name = "btnPausa";
-            btnPausa.Size = new Size(150, 35);
+            btnPausa.Size = new Size(150, 34);
             btnPausa.TabIndex = 6;
             btnPausa.Text = "Pausar (P)";
             btnPausa.UseVisualStyleBackColor = false;
             btnPausa.Click += btnPausa_Click;
+            // 
+            // btnSonido
+            // 
+            btnSonido.BackColor = Color.FromArgb(51, 65, 85);
+            btnSonido.FlatAppearance.BorderSize = 0;
+            btnSonido.FlatStyle = FlatStyle.Flat;
+            btnSonido.Font = new Font("Segoe UI", 9F);
+            btnSonido.ForeColor = Color.White;
+            btnSonido.Location = new Point(15, 452);
+            btnSonido.Name = "btnSonido";
+            btnSonido.Size = new Size(150, 34);
+            btnSonido.TabIndex = 7;
+            btnSonido.Text = "Sonido: ON (M)";
+            btnSonido.UseVisualStyleBackColor = false;
+            btnSonido.Click += btnSonido_Click;
             // 
             // GameForm
             // 
@@ -182,5 +199,6 @@ namespace TetrisApp
         private Label lblNivel;
         private Button btnIniciar;
         private Button btnPausa;
+        private Button btnSonido;
     }
 }

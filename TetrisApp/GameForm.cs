@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TetrisApp.Audio;
 using TetrisApp.Engine;
 using TetrisApp.Models;
 using TetrisApp.Rendering;
@@ -17,14 +18,16 @@ namespace TetrisApp
         private readonly TetrisEngine _engine;
         private readonly BoardRenderer _renderer;
         private readonly System.Windows.Forms.Timer _timerGravedad;
+        private readonly ITetrisSoundService _soundService;
 
-        public GameForm()
+        public GameForm(ITetrisSoundService? soundService = null)
         {
             InitializeComponent();
 
             _engine = new TetrisEngine();
             _renderer = new BoardRenderer();
             _timerGravedad = new System.Windows.Forms.Timer();
+            _soundService = soundService ?? new TetrisSoundService();
 
             ConfigurarComponentes();
         }
@@ -46,6 +49,9 @@ namespace TetrisApp
             _timerGravedad.Interval = _engine.DropIntervalMs;
             _timerGravedad.Tick += TimerGravedad_Tick;
 
+            // Sincronizar estado inicial del botón de sonido del diseñador
+            btnSonido.Text = _soundService.IsMuted ? "Sonido: OFF (M)" : "Sonido: ON (M)";
+
             // Suscribirse a los eventos del motor desacoplado
             _engine.BoardChanged += (s, e) =>
             {
@@ -56,6 +62,10 @@ namespace TetrisApp
             _engine.ScoreChanged += (s, e) => ActualizarEstadisticas();
             _engine.StateChanged += (s, e) => ActualizarEstadoJuego();
             _engine.GameOver += Engine_GameOver;
+
+            // Eventos sonoros retro
+            _engine.PieceRotated += (s, e) => _soundService.PlayRotate();
+            _engine.LinesCleared += (s, count) => _soundService.PlayLineClear(count);
         }
 
         private void AjustarEscalaTablero()
@@ -90,17 +100,20 @@ namespace TetrisApp
                     _timerGravedad.Start();
                     btnIniciar.Text = "Reiniciar";
                     btnPausa.Text = "Pausar (P)";
+                    _soundService.StartBgm();
                     break;
 
                 case GameState.Paused:
                     _timerGravedad.Stop();
                     btnPausa.Text = "Reanudar (P)";
+                    _soundService.PauseBgm();
                     break;
 
                 case GameState.GameOver:
                 case GameState.NotStarted:
                     _timerGravedad.Stop();
                     btnIniciar.Text = "Iniciar Juego";
+                    _soundService.StopBgm();
                     break;
             }
 
@@ -110,6 +123,7 @@ namespace TetrisApp
         private void Engine_GameOver(object? sender, EventArgs e)
         {
             _timerGravedad.Stop();
+            _soundService.PlayGameOver();
             picTablero.Invalidate();
 
             MessageBox.Show(
@@ -158,6 +172,13 @@ namespace TetrisApp
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            // Atajo global para silenciar/activar música y sonido (tecla M)
+            if (keyData == Keys.M)
+            {
+                AlternarSonido();
+                return true;
+            }
+
             // Si el juego está pausado o no iniciado, solo admitir alternar pausa
             if (_engine.State != GameState.Playing)
             {
@@ -203,8 +224,14 @@ namespace TetrisApp
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        private void AlternarSonido()
+        {
+            _soundService.ToggleMute();
+            btnSonido.Text = _soundService.IsMuted ? "Sonido: OFF (M)" : "Sonido: ON (M)";
+        }
+
         // ============================================================
-        // EVENTOS DE BOTONES
+        // EVENTOS DE BOTONES Y CICLO DE VIDA
         // ============================================================
 
         private void btnIniciar_Click(object? sender, EventArgs e)
@@ -215,6 +242,17 @@ namespace TetrisApp
         private void btnPausa_Click(object? sender, EventArgs e)
         {
             _engine.TogglePause();
+        }
+
+        private void btnSonido_Click(object? sender, EventArgs e)
+        {
+            AlternarSonido();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            _soundService.Dispose();
         }
     }
 }
